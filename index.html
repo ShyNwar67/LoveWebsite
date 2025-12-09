@@ -6,151 +6,228 @@
   <title>For you — A Little Surprise</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
+    /* VARIABLES MODIFIÉES POUR UN STYLE PLUS DOUX ET CUTE */
     :root{
-      --bg:#fffafc; --card:#ffffff; --accent:#ff6f9a; --accent-2:#ffd6a5; --muted:#7b6b6b; --gold:#C89B59;
+      --bg: #fff5f8; /* Rose très pâle, presque blanc */
+      --card: #ffffff;
+      --accent: #ff8fa3; /* Rose tendre */
+      --accent-2: #ffc4e2; /* Mauve/Rose doux */
+      --muted: #9c898e; /* Gris/Rose discret */
+      --gold: #fcc200; /* Jaune or adouci */
+      --shadow-color: rgba(255, 143, 163, 0.2); /* Ombre douce de la couleur accent */
     }
     *{box-sizing:border-box}
-    body{font-family:Montserrat,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial; margin:0; background:var(--bg); color:#222}
-    header{padding:36px 20px; text-align:center}
-    h1{font-family:Playfair Display,serif; font-size:38px; margin:6px 0}
-    p.lead{color:var(--muted); margin-top:8px}
-    .container{max-width:980px;margin:28px auto;padding:0 20px}
-    .stack{display:flex;flex-direction:column;gap:20px}
-    .card{background:var(--card);border-radius:16px;padding:22px;box-shadow:0 10px 30px rgba(6,6,6,0.06)}
-    .section-title{display:flex;align-items:center;gap:12px}
-    .section-title h2{margin:0;font-size:20px;color:var(--accent)}
-    .reasons p{margin:10px 0;color:#333}
-    pre.poem{white-space:pre-wrap;font-family:Playfair Display,serif;font-size:16px;line-height:1.6;color:#222;margin:0}
-    button.cta{background:linear-gradient(90deg,var(--accent),var(--accent-2));border:none;padding:10px 16px;border-radius:10px;color:white;font-weight:700;cursor:pointer}
-    .row{display:flex;gap:12px;flex-wrap:wrap}
-    .small{font-size:13px;color:var(--muted)}
+    body{font-family:'Montserrat',system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial; margin:0; background:var(--bg); color:#3c3036; line-height:1.6}
+    header{padding:40px 20px; text-align:center; background:var(--card); border-bottom:4px solid var(--accent-2)}
+    h1{font-family:'Playfair Display',serif; font-size:42px; margin:6px 0; color:var(--accent)}
+    p.lead{color:var(--muted); margin-top:8px; font-size:18px}
+    .container{max-width:1020px;margin:40px auto;padding:0 20px}
+    .stack{display:flex;flex-direction:column;gap:30px}
+    /* STYLE DE CARTE ADOUCI */
+    .card{
+      background:var(--card);
+      border-radius:20px; /* Coins plus arrondis */
+      padding:25px;
+      box-shadow:0 8px 25px rgba(255, 143, 163, 0.1); /* Ombre légère de la couleur accent */
+      border:1px solid rgba(255, 196, 226, 0.4); /* Bordure très fine et douce */
+      transition:transform 0.2s;
+    }
+    .card:hover{transform:translateY(-3px)}
+    .section-title{display:flex;align-items:center;gap:15px; margin-bottom:12px}
+    .section-title h2{margin:0;font-size:24px;color:var(--accent); font-family:'Playfair Display',serif}
+    .reasons p{margin:12px 0;color:#555;padding-left:15px;border-left:3px solid var(--accent-2)}
+    pre.poem{white-space:pre-wrap;font-family:'Playfair Display',serif;font-size:18px;line-height:1.8;color:#4a3f44;margin:0;padding:15px;background:#fffafc;border-radius:10px}
+    
+    /* NOUVEAU STYLE DE BOUTON CUTE ET INTERACTIF */
+    button.cta{
+      background:linear-gradient(135deg,var(--accent),var(--accent-2));
+      border:none;
+      padding:12px 20px;
+      border-radius:10px;
+      color:white;
+      font-weight:700;
+      cursor:pointer;
+      transition:all 0.15s;
+      box-shadow:0 4px 0 var(--accent-2); /* Effet 3D doux */
+      text-transform:uppercase;
+      letter-spacing:0.5px;
+    }
+    button.cta:hover{transform:translateY(-1px);box-shadow:0 5px 0 var(--accent-2);}
+    button.cta:active{transform:translateY(3px);box-shadow:0 1px 0 var(--accent-2);}
+    
+    /* BOUTONS SPÉCIAUX */
+    #musicToggle{background:linear-gradient(135deg,var(--gold),#ffdb58); box-shadow:0 4px 0 #ffd6a5;}
+    #musicToggle:active{transform:translateY(3px); box-shadow:0 1px 0 #ffd6a5;}
+
+    .row{display:flex;gap:15px;flex-wrap:wrap;align-items:stretch}
+    .small{font-size:14px;color:var(--muted)}
     .center{display:flex;align-items:center;justify-content:center}
-    .hearts{pointer-events:none;position:fixed;left:0;top:0;width:100%;height:100%;overflow:hidden}
-    .heart{position:absolute;opacity:0;animation:float 4s linear forwards}
+    .hearts{pointer-events:none;position:fixed;left:0;top:0;width:100%;height:100%;overflow:hidden;z-index:999}
+    .heart{position:absolute;opacity:0;animation:float 4s linear forwards; font-size:20px;}
     @keyframes float{0%{transform:translateY(110%);opacity:0}10%{opacity:1}100%{transform:translateY(-10%);opacity:0}}
-    .game-canvas{background:linear-gradient(180deg,#fff,#ffeef3);border-radius:10px;padding:12px}
-    footer{padding:28px;text-align:center;color:var(--muted);font-size:13px}
+    
+    /* STYLE DE CONTEURS ET AUTRES ÉLÉMENTS */
+    .game-canvas{background:linear-gradient(180deg,#fff,#ffeef3);border-radius:12px;padding:15px; flex-grow:1;}
+    .counter-box{padding:15px; background:#fffafc; border-radius:10px; text-align:center; flex:1; border:1px solid var(--accent-2);}
+    .counter-box strong{color:var(--accent); font-size:18px; display:block; margin-bottom:4px;}
+    .counter-number{font-family:'Playfair Display',serif; font-size:32px; color:#4a3f44; margin-top:6px; font-weight:700;}
+    .wheel{
+      background: radial-gradient(circle, #fff, var(--accent-2));
+      font-family:'Playfair Display',serif;
+      font-size:24px;
+      font-weight:700;
+      color:var(--accent);
+      border:8px solid var(--accent);
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transition:transform 3s ease-out;
+      box-shadow:0 0 15px var(--shadow-color);
+    }
+    select, input[type="text"]{
+      padding:12px;
+      border-radius:10px;
+      border:1px solid var(--accent-2);
+      width:100%;
+      background:#fff;
+      font-size:16px;
+      color:#4a3f44;
+      transition:border-color 0.2s;
+    }
+    select:focus, input[type="text"]:focus{border-color:var(--accent); outline:none;}
+    
+    footer{padding:30px;text-align:center;color:var(--muted);font-size:14px; margin-top:20px}
     @media(min-width:820px){.container{padding:0 40px}}
     .hidden{display:none;}
+
+    /* Style pour le mode 'cute' */
+    body.cute-mode{
+      background:pink;
+      background:var(--accent-2);
+    }
+    .quiz-question .cta{margin:6px;}
+    .quiz-question p{font-size:16px; color:#4a3f44;}
+
+    /* Modal style */
+    #modal > div {
+      background: var(--card);
+      padding: 30px;
+      border-radius: 20px;
+      max-width: 450px;
+      width: 90%;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+    }
   </style>
 </head>
 <body>
   <header>
-    <h1>For you — a small world of reasons</h1>
+    <h1>For you — a small world of reasons ✨</h1>
     <p class="lead">A little website I made to tell you how much you mean to me.</p>
   </header>
 
   <main class="container">
     <div class="stack">
 
-      <!-- 1 Spin wheel -->
       <section class="card">
-        <div class="section-title"><h2>1 — Spin the wheel</h2></div>
+        <div class="section-title"><h2>1 — Spin the wheel 🎡</h2></div>
         <p class="small">Click to spin — it'll pick a sweet surprise</p>
-        <div style="margin-top:12px" class="center">
-          <div id="wheel" class="wheel card" style="width:220px;height:220px;border:6px solid rgba(0,0,0,0.04); cursor:pointer;">SPIN</div>
+        <div style="margin-top:20px" class="center">
+          <div id="wheel" class="wheel" style="width:220px;height:220px; cursor:pointer;">SPIN</div>
         </div>
-        <div id="wheelResult" style="margin-top:12px"></div>
+        <div id="wheelResult" style="margin-top:15px; text-align:center; font-size:18px; font-weight:700; color:var(--accent);"></div>
       </section>
 
-      <!-- 2 Cute mode & music -->
       <section class="card">
-        <div class="section-title"><h2>2 — Cute mode</h2></div>
-        <p class="small">Make the page extra soft</p>
-        <div style="margin-top:12px" class="row">
+        <div class="section-title"><h2>2 — Cute mode 💖 & Music 🎶</h2></div>
+        <p class="small">Make the page extra soft and set the mood</p>
+        <div style="margin-top:15px" class="row">
           <button class="cta" id="cuteToggle">Activate cute mode</button>
-          <button class="cta" id="musicToggle" style="background:var(--gold);">Toggle music</button>
+          <button class="cta" id="musicToggle" style="background:linear-gradient(135deg,var(--gold),#ffdb58); box-shadow:0 4px 0 #ffdb58;">Toggle music</button>
         </div>
       </section>
 
-      <!-- 3 Quiz -->
       <section class="card" id="quiz">
-        <div class="section-title"><h2>3 — Quiz — How well do you know me?</h2></div>
+        <div class="section-title"><h2>3 — Quiz — How well do you know me? 🧠</h2></div>
         <p class="small">Pick the one correct answer</p>
-        <div id="quizArea" style="margin-top:12px"></div>
+        <div id="quizArea" style="margin-top:20px"></div>
       </section>
 
-      <!-- 4 Love hotline -->
       <section class="card">
-        <div class="section-title"><h2>4 — Love hotline</h2></div>
+        <div class="section-title"><h2>4 — Love hotline 📞</h2></div>
         <p class="small">Call your boyfriend's customer service</p>
-        <div style="margin-top:12px">
-          <select id="hotline" style="padding:10px;border-radius:8px;border:1px solid #eee;width:100%">
+        <div style="margin-top:15px">
+          <select id="hotline">
             <option>Choose a reason...</option>
             <option>Need a hug</option>
             <option>Urgent compliment</option>
             <option>Send cute photo</option>
             <option>Immediate declaration</option>
           </select>
-          <div id="hotlineAnswer" style="margin-top:12px"></div>
+          <div id="hotlineAnswer" style="margin-top:15px; padding:10px; border-radius:8px; background:#fffafc; color:var(--accent); font-weight:700;"></div>
         </div>
       </section>
 
-      <!-- 5 Mini games -->
       <section class="card">
-        <div class="section-title"><h2>5 — Mini games</h2></div>
+        <div class="section-title"><h2>5 — Mini games 🎮</h2></div>
         <p class="small">Catch hearts or find the hidden heart</p>
-        <div style="margin-top:12px" class="row">
-          <div style="flex:1" class="game-canvas">
-            <div style="margin-bottom:8px">Catch the falling heart — click it as often as you can in 10s</div>
+        <div style="margin-top:15px" class="row">
+          <div class="game-canvas">
+            <div style="margin-bottom:8px; color:var(--accent); font-weight:700;">Catch the falling heart</div>
             <div class="center"><button class="cta" id="startCatch">Start game</button></div>
-            <div id="catchArea" style="height:180px;position:relative;margin-top:8px;border-radius:8px;overflow:hidden;background:#fff;padding:8px"></div>
-            <div id="catchScore" style="margin-top:8px" class="small">Score: 0</div>
+            <div id="catchArea" style="height:180px;position:relative;margin-top:12px;border-radius:10px;overflow:hidden;background:#ffffff;border:1px solid var(--accent-2);padding:8px"></div>
+            <div id="catchScore" style="margin-top:10px" class="small">Score: 0</div>
           </div>
 
-          <div style="flex:1" class="game-canvas">
-            <div style="margin-bottom:8px">Find my heart — choose one of the three cards</div>
-            <div class="center" style="gap:8px;display:flex;margin-top:8px">
+          <div class="game-canvas">
+            <div style="margin-bottom:8px; color:var(--accent); font-weight:700;">Find my heart</div>
+            <div class="center" style="gap:12px;display:flex;margin-top:12px">
               <button class="cta" data-card="1">Card 1</button>
               <button class="cta" data-card="2">Card 2</button>
               <button class="cta" data-card="3">Card 3</button>
             </div>
-            <div id="findResult" style="margin-top:8px" class="small"></div>
+            <div id="findResult" style="margin-top:15px; text-align:center; font-weight:700; color:var(--accent);" class="small"></div>
           </div>
         </div>
       </section>
 
-      <!-- 6 Dangerous button -->
       <section class="card">
-        <div class="section-title"><h2>6 — Dangerous button</h2></div>
-        <p class="small">Don't press it. But you will.</p>
-        <div style="margin-top:12px" class="center">
-          <button class="cta" id="dangerBtn">DON'T CLICK THIS</button>
+        <div class="section-title"><h2>6 — Dangerous button 🛑</h2></div>
+        <p class="small">Don't press it. But you will. 😉</p>
+        <div style="margin-top:15px" class="center">
+          <button class="cta" id="dangerBtn" style="background:linear-gradient(135deg,#ff3366,#ff6f9a); box-shadow:0 4px 0 #cc0033;">DON'T CLICK THIS</button>
         </div>
-        <div id="marriageModal" class="hidden" style="margin-top:12px"></div>
+        <div id="marriageModal" class="hidden" style="margin-top:15px; text-align:center; padding:10px; background:#fffafc; border-radius:10px; color:#ff3366; font-weight:700;"></div>
       </section>
 
-      <!-- 7 When you miss me -->
       <section class="card">
-        <div class="section-title"><h2>7 — When you miss me...</h2></div>
+        <div class="section-title"><h2>7 — When you miss me... 🥺</h2></div>
         <p class="small">Tap for a reminder</p>
-        <div style="margin-top:12px" class="center">
+        <div style="margin-top:15px" class="center">
           <button class="cta" id="missBtn">Click me</button>
         </div>
-        <p id="missMsg" class="small" style="margin-top:10px; display:none;"></p>
+        <p id="missMsg" class="small" style="margin-top:15px; padding:10px; border-radius:8px; background:#fffafc; color:var(--accent); display:none; text-align:center; font-size:16px; font-weight:700;"></p>
       </section>
 
-      <!-- 8 Counters -->
       <section class="card">
-        <div class="section-title"><h2>8 — Counters</h2></div>
-        <div style="margin-top:12px" class="row">
-          <div style="flex:1">
+        <div class="section-title"><h2>8 — Counters ⏳</h2></div>
+        <div style="margin-top:15px" class="row">
+          <div class="counter-box">
             <strong>Days together</strong>
-            <div id="daysTogether" style="font-size:20px;margin-top:6px">—</div>
+            <div id="daysTogether" class="counter-number">—</div>
             <div class="small">(since Nov 12)</div>
           </div>
-          <div style="flex:1">
+          <div class="counter-box">
             <strong>How much time I think about you</strong>
-            <div id="secondsThought" style="font-size:20px;margin-top:6px">0</div>
+            <div id="secondsThought" class="counter-number">0</div>
             <div class="small">(and it's increasing)</div>
           </div>
         </div>
       </section>
 
-      <!-- 9 Reasons I love you -->
       <section class="card">
-        <div class="section-title"><h2>9 — Reasons I love you</h2></div>
-        <div class="reasons" style="margin-top:12px">
+        <div class="section-title"><h2>9 — Reasons I love you 🥰</h2></div>
+        <div class="reasons" style="margin-top:15px">
           <p>I love your eyes since nini introduced me to you and showed me your tiktok to show me your face the first thing i noticed was your beautiful eyes.</p>
           <p>I love your hair especially the color It truly reflects the love i have for you which shines passionately like the sun.</p>
           <p>I love your smile just seeing you smile can make my day so much better and give me all the motivation i want to go through a hard day.</p>
@@ -162,101 +239,75 @@
         </div>
       </section>
 
-      <!-- 10 Timeline -->
       <section class="card" id="timeline">
-        <div class="section-title"><h2>10 — Timeline</h2></div>
-        <p class="small" style="margin-top:10px">Do u remember the time we met ? We were at first both scared i literally asked nini if i should text first or no, i remember seeing your beautiful face looking at me for the first time through your story, the first compliment i told u how beautiful your eyes are. Do u remember how we helped each other at the beginning how i said that i kinda hate myself and that you'd change that now i can say that u did it like u promised. I also remember how i helped u when times were hard and it really made me happy seeing that i helped u being better. I also remember the first time i truly smile after years seeing your notification on my phone seeing your texts. Do u remember the day i confessed? That day i was going insane i couldnt hold it anymore the whole day i was teasing you abt if i loved u or no and at the end i said it while u were talking abt fish ahah blub blub (i love you in fish). And do u remember when i wrote it the long message after u slept because i wanted you to wake up with a smile on your face and it worked a bit too much because tear came out xd.</p>
+        <div class="section-title"><h2>10 — Timeline 🗓️</h2></div>
+        <p style="margin-top:15px" class="small">Do u remember the time we met ? We were at first both scared i literally asked nini if i should text first or no, i remember seeing your beautiful face looking at me for the first time through your story, the first compliment i told u how beautiful your eyes are. Do u remember how we helped each other at the beginning how i said that i kinda hate myself and that you'd change that now i can say that u did it like u promised. I also remember how i helped u when times were hard and it really made me happy seeing that i helped u being better. I also remember the first time i truly smile after years seeing your notification on my phone seeing your texts. Do u remember the day i confessed? That day i was going insane i couldnt hold it anymore the whole day i was teasing you abt if i loved u or no and at the end i said it while u were talking abt fish ahah blub blub (i love you in fish). And do u remember when i wrote it the long message after u slept because i wanted you to wake up with a smile on your face and it worked a bit too much because tear came out xd.</p>
       </section>
 
-      <!-- 11 How you changed my life -->
       <section class="card">
-        <div class="section-title"><h2>11 — You changed my life</h2></div>
-        <p style="margin-top:10px">Did u know that u changed my life ? Crazy isnt it how a single person can make my life so much better just by being in it. Before you i was sad, showing 0 emotions going day after day hating myself even more each day. I was trying really hard to stay and just go to the next day with everything that happened the month before i met you. But now since i met u i found myself smiling again showing my emotions opening my heart telling someone how i feel, how are my day because someone cared about me i finally loved myself again and all that thanks to you and i can never thank you enough for that i knew since the beginning that you were different and you would never leave and im really thankfull for that because now i dont know what will be my life without you in it.</p>
+        <div class="section-title"><h2>11 — You changed my life 💫</h2></div>
+        <p style="margin-top:15px">Did u know that u changed my life ? Crazy isnt it how a single person can make my life so much better just by being in it. Before you i was sad, showing 0 emotions going day after day hating myself even more each day. I was trying really hard to stay and just go to the next day with everything that happened the month before i met you. But now since i met u i found myself smiling again showing my emotions opening my heart telling someone how i feel, how are my day because someone cared about me i finally loved myself again and all that thanks to you and i can never thank you enough for that i knew since the beginning that you were different and you would never leave and im really thankfull for that because now i dont know what will be my life without you in it.</p>
       </section>
 
-      <!-- 12 Poem -->
       <section class="card">
-        <div class="section-title"><h2>12 — Poem</h2></div>
-        <div style="margin-top:12px">
-          <pre class="poem" id="poem">In your hazel eyes, I found my sunrise
+        <div class="section-title"><h2>12 — Poem 💌</h2></div>
+        <div style="margin-top:15px">
+          <pre class="poem" id="poem">In your hazel eyes, I find my rising light,
+where autumn gold drifts warm in gentle fire;
+the world itself grows still, as if in quiet desire,
+pausing just to watch your spirit brighten night.
 
-colors warm as autumn light,
-shifting softly between gold and amber,
-as if the world itself pauses
-just to admire you.
+Your dirty blonde hair moves like summer’s tender air,
+soft strokes of sun that brush the space we share;
+it paints the passing moments with a golden flare,
+and turns each breath between us into something rare.
 
-Your dirty blonde hair falls like quiet summer winds,
-brushstrokes of sunlight
-painting every breath between us.
-And your lips
-full, soft, impossibly beautiful
-hold a gravity that pulls my soul
-closer every time you smile.
+Your lips full and soft hold a pull my soul obeys,
+a gravity that draws my heart without a sound;
+and your smile opens the world, spreading heaven around,
+lifting the dawn as shadows fade beneath its rays.
 
-And when you smile,
-the whole world opens
-like dawn lifting its veil
-to let the day breathe again.
+Your laughter turns the simplest minutes bright,
+it hums beneath the skin in colors living true;
+its joy runs wild and echoes in the light,
+as if the universe imagined it for you.
 
-Your laughter is the kind
-that turns ordinary minutes
-into memories that hum beneath the skin,
-bright and contagious,
-the kind of sound the universe
-must have been thinking of
-when it invented joy.
+And your voice warm and gentle and uniquely yours stays,
+wrapping my restless thoughts in silk again;
+each “hello” a home my heart forever surveys,
+a quiet miracle whispered soft within my veins.
 
-And your voice
-soft, warm, unmistakably yours
-wraps around my thoughts
-like silk and sunlight.
-Every “hello” feels like home,
-every word feels like
-a quiet miracle
-meant only for me.
+Look at the stars above: count them if you can,
+for that’s the number of years I’ll choose you still.
+Look at the grains of sand: each one, small as it began,
+is a kiss at dawn, a promise shaped by will.
 
-Look at the stars.
-See them? Count them.
-That's how many years I want to spend with you.
+Look at the leaves on every rooted tree,
+too few to match each “I love you” I’d speak;
+their falling rising seasons cannot mimic me,
+for my devotion never bends nor fades nor weakens free.
 
-Look at the grains of sand.
-Each one is a kiss
-shared at the bliss of dawn,
-a promise whispered to the morning.
+Though stars burn out and sands shift with the tide,
+though leaves may fall and lose their summer guide;
+my love remains, it grows, it will not hide,
+it learns your laughter’s shape and stays beside.
 
-Look at the leaves on every tree.
-There are too few to match
-how often I will tell you
-"I love you."
+If love were a journey, I’d walk it barefoot true,
+to feel each moment pain or peace with you;
+if love were a sky, you’d be the guiding hue,
+the light that softens night and warms it through.
 
-But even stars burn out,
-even sand shifts with the tide,
-even leaves fall and return 
-yet my love?
-It stays.
-It grows.
-It learns the shape of your laughter,
-the warmth of your presence,
-the music of your heartbeat at rest.
+If love were a language, it would sound like your name,
+rise with your laughter, shine in your flame;
+your smile would speak it gentle and the same,
+turning every shadow into something tame.
 
-If love were a journey,
-I’d walk it barefoot
-just to feel every moment with you.
-If love were a sky,
-you’d be the light
-that turns night into something gentle.
-
-And if love were a language
-it would sound like your voice,
-rise with your laughter,
-and shine with your smile.
-
-You are the quiet miracle I never expected,
-and the endless horizon I choose,
-again and again,
-in every version of forever.
+You are the quiet miracle I never thought to see,
+the endless horizon where my heart draws near;
+and in every version of forever waiting for me,
+it’s you I choose again always ever dear.
 </pre>
-          <div style="margin-top:10px" class="center">
+          <div style="margin-top:15px" class="center">
             <button class="cta" id="revealPoem">Reveal line-by-line</button>
           </div>
         </div>
@@ -268,17 +319,16 @@ in every version of forever.
   <div class="hearts" id="hearts"></div>
   <audio id="bgMusic" loop src=""></audio>
 
-  <!-- modal for fake marriage -->
-  <div id="modal" style="position:fixed;left:0;top:0;width:100%;height:100%;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.5)">
-    <div style="background:white;padding:20px;border-radius:12px;max-width:420px;width:90%">
-      <h3 style="margin-top:0">Official Marriage Form (fake)</h3>
+  <div id="modal" style="position:fixed;left:0;top:0;width:100%;height:100%;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.4);z-index:1000">
+    <div>
+      <h3 style="margin-top:0; color:var(--accent); font-family:'Playfair Display',serif;">Official Marriage Form (fake) 💍</h3>
       <p class="small">Please sign below to make this 100% legal. (just kidding)</p>
-      <div style="margin-top:12px">
-        <label style="display:block">Name</label>
-        <input id="nameField" style="width:100%;padding:10px;border-radius:8px;border:1px solid #eee" placeholder="Your name">
+      <div style="margin-top:20px">
+        <label style="display:block; margin-bottom:5px; font-weight:700;">Name</label>
+        <input id="nameField" type="text" placeholder="Your name">
       </div>
-      <div style="margin-top:12px;display:flex;justify-content:flex-end;gap:8px">
-        <button onclick="closeModal()" style="padding:8px 12px;border-radius:8px">Cancel</button>
+      <div style="margin-top:20px;display:flex;justify-content:flex-end;gap:10px">
+        <button onclick="closeModal()" style="background:#ddd; color:#555; box-shadow:none;">Cancel</button>
         <button id="signBtn" class="cta">Sign (fake)</button>
       </div>
     </div>
@@ -290,12 +340,12 @@ in every version of forever.
 
   <script>
     // Poem reveal line by line
-    const poemText = document.getElementById('poem').textContent.trim().split('\n');
+    const poemText = document.getElementById('poem').textContent.trim().split('\n').filter(line => line.trim() !== '');
     document.getElementById('revealPoem').addEventListener('click',()=>{
       const area = document.getElementById('poem'); area.textContent='';
       let i=0; const interval=setInterval(()=>{
-        if(i>=poemText.length){clearInterval(interval);return;}
-        area.textContent += poemText[i]+"\n"; i++;
+        if(i>=poemText.length){clearInterval(interval);document.getElementById('revealPoem').textContent='Poem revealed!';return;}
+        area.textContent += poemText[i]+"\n\n"; i++;
       },220);
     });
 
@@ -304,11 +354,12 @@ in every version of forever.
     function closeModal(){ modal.style.display='none'; }
     document.getElementById('dangerBtn').addEventListener('click',()=>{ modal.style.display='flex'; });
     document.getElementById('signBtn').addEventListener('click',()=>{
-      const name=document.getElementById('nameField').value||'(signed)';
+      const name=document.getElementById('nameField').value||'(Signed with Love)';
       modal.style.display='none';
       const contract = document.getElementById('marriageModal');
       const today = new Date().toLocaleDateString();
       contract.innerHTML = `<p>Congratulations ${name}! You are now officially (fake) my spouse. ❤️ — ${today}</p>`;
+      contract.classList.remove('hidden');
     });
 
     // Quiz
@@ -326,15 +377,31 @@ in every version of forever.
     ];
     const quizArea=document.getElementById('quizArea');
     quizData.forEach((q,i)=>{
-      const div=document.createElement('div'); div.style.marginBottom='12px';
-      div.innerHTML=`<p><strong>Q${i+1} — ${q.q}</strong></p>` + q.a.map((ans,j)=>`<button class="cta" data-q="${i}" data-a="${j}" style="margin:4px">${ans}</button>`).join('');
+      const div=document.createElement('div'); div.className='quiz-question';
+      div.style.marginBottom='15px';
+      div.innerHTML=`<p><strong>Q${i+1} — ${q.q}</strong></p>` + q.a.map((ans,j)=>`<button class="cta" data-q="${i}" data-a="${j}">${ans}</button>`).join('');
       quizArea.appendChild(div);
     });
     quizArea.addEventListener('click',e=>{
       if(e.target.tagName==='BUTTON' && e.target.dataset.q!==undefined){
         const qi=Number(e.target.dataset.q);
         const ai=Number(e.target.dataset.a);
-        if(ai===quizData[qi].correct){e.target.style.background='green';} else {e.target.style.background='red';}
+        
+        // Disable other buttons in this question
+        e.target.parentNode.querySelectorAll('button').forEach(btn => btn.disabled = true);
+
+        if(ai===quizData[qi].correct){
+          e.target.style.background='linear-gradient(135deg, green, #6cff6c)';
+          e.target.style.boxShadow='0 4px 0 #008000';
+          e.target.style.transform='translateY(0)';
+        } else {
+          e.target.style.background='linear-gradient(135deg, red, #ff6c6c)';
+          e.target.style.boxShadow='0 4px 0 #cc0000';
+          e.target.style.transform='translateY(0)';
+          // Highlight correct answer
+          e.target.parentNode.querySelector(`button[data-a="${quizData[qi].correct}"]`).style.background='linear-gradient(135deg, gold, #ffdb58)';
+          e.target.parentNode.querySelector(`button[data-a="${quizData[qi].correct}"]`).style.boxShadow='0 4px 0 #cc9900';
+        }
       }
     });
 
@@ -363,52 +430,172 @@ in every version of forever.
       "Nothing, better luck next time xd 😅"
     ];
     wheel.addEventListener('click',()=>{
-      const choice = wheelOptions[Math.floor(Math.random()*wheelOptions.length)];
-      wheelResult.textContent = choice;
+      // Reset transform
+      wheel.style.transform = 'rotate(0deg)';
+      // Random spin
+      const randomDegree = 360 * 5 + Math.floor(Math.random() * 360); // 5 full spins + random part
+      wheel.style.transition = 'transform 3s ease-out';
+      wheel.style.transform = `rotate(${randomDegree}deg)`;
+
+      // Get result after spin ends
+      setTimeout(()=>{
+        const choice = wheelOptions[Math.floor(Math.random()*wheelOptions.length)];
+        wheelResult.textContent = choice;
+        wheel.style.transition = 'none'; // Stop transition for next click
+      }, 3000);
     });
 
     // Cute mode toggle
     const cuteToggle = document.getElementById('cuteToggle');
     cuteToggle.addEventListener('click',()=>{
-      document.body.style.background = document.body.style.background==='pink' ? '#fffafc' : 'pink';
+      document.body.classList.toggle('cute-mode');
+      const heartsContainer = document.getElementById('hearts');
+      if (document.body.classList.contains('cute-mode')) {
+        cuteToggle.textContent = 'Deactivate cute mode';
+        // Start raining hearts
+        const rainInterval = setInterval(()=>{
+          const heart = document.createElement('div');
+          heart.className='heart';
+          heart.textContent='❤️';
+          heart.style.left = Math.random() * 100 + 'vw';
+          heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+          heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
+          heartsContainer.appendChild(heart);
+          setTimeout(() => { heart.remove(); }, 5000);
+        }, 300);
+        heartsContainer.dataset.interval = rainInterval;
+
+      } else {
+        cuteToggle.textContent = 'Activate cute mode';
+        // Stop raining hearts
+        clearInterval(heartsContainer.dataset.interval);
+        heartsContainer.innerHTML = '';
+      }
     });
 
     // Music toggle
     const musicToggle = document.getElementById('musicToggle');
     const bgMusic = document.getElementById('bgMusic');
+    // NOTE: Need to provide a valid music URL for this to work
+    // Example: bgMusic.src = "url_to_a_soft_song.mp3"; 
     musicToggle.addEventListener('click',()=>{ 
-      if(bgMusic.paused){ bgMusic.play(); } else { bgMusic.pause(); }
+      if(bgMusic.paused){ bgMusic.play(); musicToggle.textContent = 'Pause music';} 
+      else { bgMusic.pause(); musicToggle.textContent = 'Play music';}
     });
+    // Set initial music button text
+    bgMusic.paused ? musicToggle.textContent = 'Play music' : musicToggle.textContent = 'Pause music';
+
 
     // Mini games placeholder logic (catch hearts & find heart)
     let catchScore = 0;
-    document.getElementById('startCatch').addEventListener('click',()=>{
-      const area = document.getElementById('catchArea');
-      area.innerHTML = '';
-      catchScore = 0;
-      const interval = setInterval(()=>{
-        const heart = document.createElement('div');
-        heart.textContent='❤️'; heart.style.position='absolute';
-        heart.style.left=Math.random()*160+'px'; heart.style.top='0px';
-        area.appendChild(heart);
-        const move = setInterval(()=>{
-          let top = parseInt(heart.style.top);
-          if(top>=160){ clearInterval(move); heart.remove(); return;}
-          heart.style.top=(top+5)+'px';
-        },100);
-        heart.addEventListener('click',()=>{ catchScore++; heart.remove(); document.getElementById('catchScore').textContent='Score: '+catchScore; });
-      },500);
-      setTimeout(()=>{ clearInterval(interval); alert('Game over! Score: '+catchScore); area.innerHTML=''; },10000);
+    let catchGameActive = false;
+    document.getElementById('startCatch').addEventListener('click', function() {
+        if(catchGameActive) return; // Prevent double start
+
+        const btn = this;
+        btn.disabled = true;
+        catchGameActive = true;
+
+        const area = document.getElementById('catchArea');
+        area.innerHTML = '';
+        catchScore = 0;
+        document.getElementById('catchScore').textContent='Score: 0';
+        
+        let timeLeft = 10;
+        const timerDisplay = document.getElementById('catchScore');
+        timerDisplay.textContent = `Time left: ${timeLeft}s | Score: 0`;
+
+        const timer = setInterval(() => {
+            timeLeft--;
+            timerDisplay.textContent = `Time left: ${timeLeft}s | Score: ${catchScore}`;
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+            }
+        }, 1000);
+
+        const interval = setInterval(()=>{
+            if (timeLeft <= 0) {
+                clearInterval(interval);
+                return;
+            }
+            const heart = document.createElement('div');
+            heart.textContent='❤️'; 
+            heart.style.position='absolute';
+            // Random position
+            const areaWidth = area.clientWidth - 30; // 30px for heart size
+            const areaHeight = area.clientHeight;
+            heart.style.left=Math.random()*areaWidth+'px'; 
+            heart.style.top='-30px'; // Start above
+            
+            // Random speed for movement
+            const speed = Math.random() * 3 + 2; 
+
+            area.appendChild(heart);
+            const move = setInterval(()=>{
+                if (timeLeft <= 0) {
+                    clearInterval(move);
+                    heart.remove();
+                    return;
+                }
+                let top = parseInt(heart.style.top) || 0;
+                if(top>=areaHeight){ 
+                    clearInterval(move); 
+                    heart.remove(); 
+                    return;
+                }
+                heart.style.top=(top+speed)+'px';
+            }, 50);
+
+            heart.addEventListener('click', ()=>{ 
+                if (timeLeft > 0) {
+                    catchScore++; 
+                    heart.remove(); 
+                    timerDisplay.textContent = `Time left: ${timeLeft}s | Score: ${catchScore}`;
+                }
+            });
+        }, 400); // Faster heart spawning
+
+        setTimeout(()=>{ 
+            clearInterval(interval); 
+            clearInterval(timer);
+            alert('Game over! Final Score: '+catchScore); 
+            area.innerHTML=''; 
+            btn.disabled = false;
+            catchGameActive = false;
+            timerDisplay.textContent = `Score: ${catchScore}`;
+        }, 10000);
     });
+
 
     document.querySelectorAll('[data-card]').forEach(btn=>{
       btn.addEventListener('click',()=>{
+        const resultDiv = document.getElementById('findResult');
+        // Disable all card buttons after first click
+        document.querySelectorAll('[data-card]').forEach(b => b.disabled = true);
+
         const win = Math.ceil(Math.random()*3);
-        if(Number(btn.dataset.card)===win){
-          document.getElementById('findResult').textContent='You found my heart! ❤️';
+        const cardNum = Number(btn.dataset.card);
+
+        // Highlight correct card
+        const correctBtn = document.querySelector(`[data-card="${win}"]`);
+        correctBtn.style.background = 'linear-gradient(135deg, #00b894, #55efc4)';
+        correctBtn.style.boxShadow = '0 4px 0 #008064';
+
+        if(cardNum===win){
+          resultDiv.textContent='You found my heart! ❤️ You win a kiss on the cheek!';
         } else {
-          document.getElementById('findResult').textContent='Oops, try again 😅';
+          resultDiv.textContent=`Oops, try again! My heart was under Card ${win} 😔.`;
         }
+
+        // Re-enable buttons after a delay
+        setTimeout(()=>{
+          document.querySelectorAll('[data-card]').forEach(b => {
+            b.disabled = false;
+            b.style.background = ''; // Reset background
+            b.style.boxShadow = ''; // Reset shadow
+          });
+          resultDiv.textContent = ''; // Clear result
+        }, 3000);
       });
     });
 
@@ -416,16 +603,13 @@ in every version of forever.
     document.getElementById('hotline').addEventListener('change',e=>{
       const val = e.target.value;
       const res = document.getElementById('hotlineAnswer');
-      if(val==='Need a hug') res.textContent='Sending virtual hugs 🤗';
-      else if(val==='Urgent compliment') res.textContent='You are so perfect that it feels like heaven is on earth 😘';
-      else if(val==='Send cute photo') res.textContent='I must send you a cute pic 🥰';
-      else if(val==='Immediate declaration') res.textContent='I love you so much that words cant even describe what i feel towards you ❤️';
+      if(val==='Need a hug') res.textContent='Sending virtual hugs 🤗 from 1000 miles away!';
+      else if(val==='Urgent compliment') res.textContent='You are so perfect that it feels like heaven is on earth 😘 Your existence is a masterpiece!';
+      else if(val==='Send cute photo') res.textContent='I must send you a cute pic 🥰 Right now, look at your phone!';
+      else if(val==='Immediate declaration') res.textContent='I love you so much that words cant even describe what i feel towards you ❤️ My heart is full of you!';
       else res.textContent='';
     });
 
   </script>
 </body>
 </html>
-
-
-
