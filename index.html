@@ -321,7 +321,7 @@ it’s you I choose again always ever dear.
 
   <div id="modal" style="position:fixed;left:0;top:0;width:100%;height:100%;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.4);z-index:1000">
     <div>
-      <h3 style="margin-top:0; color:var(--accent); font-family:'Playfair Display',serif;">Official Marriage Form (fake) 💍</h3>
+      <h3 style="margin-top:0; color:var(--accent); font-family:'Playfair Display',serif;">Official Marriage Form 💍</h3>
       <p class="small">Please sign below to make this 100% legal. (just kidding)</p>
       <div style="margin-top:20px">
         <label style="display:block; margin-bottom:5px; font-weight:700;">Name</label>
@@ -329,7 +329,7 @@ it’s you I choose again always ever dear.
       </div>
       <div style="margin-top:20px;display:flex;justify-content:flex-end;gap:10px">
         <button onclick="closeModal()" style="background:#ddd; color:#555; box-shadow:none;">Cancel</button>
-        <button id="signBtn" class="cta">Sign (fake)</button>
+        <button id="signBtn" class="cta">Sign </button>
       </div>
     </div>
   </div>
@@ -358,7 +358,7 @@ it’s you I choose again always ever dear.
       modal.style.display='none';
       const contract = document.getElementById('marriageModal');
       const today = new Date().toLocaleDateString();
-      contract.innerHTML = `<p>Congratulations ${name}! You are now officially (fake) my spouse. ❤️ — ${today}</p>`;
+      contract.innerHTML = `<p>Congratulations ${name}! You are now officially my spouse. ❤️ — ${today}</p>`;
       contract.classList.remove('hidden');
     });
 
@@ -613,5 +613,6 @@ it’s you I choose again always ever dear.
   </script>
 </body>
 </html>
+
 
 
